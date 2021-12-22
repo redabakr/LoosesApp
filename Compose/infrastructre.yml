@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+      - "./rabbitmq:/etc/shoppy"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      - RABBITMQ_CONFIG_FILE=/rtc/shoppy/rabbitmq.conf
+  
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sqlserver
+    volumes: 
+      - sqlserverdata:/var/opt/mssql
+    ports:
+      - "1434:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSQL_PID=Developer
+      - SA_PASSWORD=P@ssw0rd
+  
+  mailserver:
+    image: maildev/maildev
+    container_name: mailserver
+    ports:
+      - "25:25"
+      - "4000:80"
+
+  logserver:
+    image: datalust/seq:latest
+    container_name: logserver
+    ports:
+      - "5341:80"
+    environment:
+      - ACCEPT_EULA=Y 
+
+volumes:
+  sqlserverdata:
+    external: true    
+  rabbitmqdata:
+    external: true
+
+networks:
+    shoppy:
+      name: shoppy
