@@ -24,7 +24,19 @@ services:
       - ACCEPT_EULA=Y
       - MSQL_PID=Developer
       - SA_PASSWORD=P@ssw0rd
-  
+
+  # postgres:
+  #   image: postgres
+  #   shm_size: '4gb'
+  #   container_name: postgres
+  #   restart: unless-stopped
+  #   environment:
+  #     - POSTGRES_HOST_AUTH_METHOD=trust
+  #   ports:
+  #     - 5432:5432
+  #   volumes:
+  #     - postgres:/var/lib/postgresql/data
+
   mailserver:
     image: maildev/maildev
     container_name: mailserver
@@ -45,6 +57,8 @@ volumes:
     external: true    
   rabbitmqdata:
     external: true
+  # postgres:
+  #   driver: local
 
 networks:
     shoppy:
