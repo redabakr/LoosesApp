@@ -23,7 +23,7 @@ public class CreateCustomer
         public Gender Gender { get; set; }
     }//Command
 
-    public class CommandValidator : AbstractValidator<Command>
+    protected class CommandValidator : AbstractValidator<Command>
     {
         private const uint MaxAge = 12;
         public CommandValidator()

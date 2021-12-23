@@ -5,11 +5,9 @@ using Customer.Shared;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddShared();
-            
-builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -25,12 +23,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-   
 app.UseShared();
+app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.MapDefaultControllerRoute();
+app.MapControllers();
 
 app.Run();

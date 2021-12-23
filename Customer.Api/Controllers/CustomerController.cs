@@ -5,23 +5,24 @@ using Microsoft.AspNetCore.Mvc;
 using MediatR;
 namespace Customer.Api.Controllers;
 
-public class CustomerController: BaseController
+public class CustomersController: BaseController
 {
     private readonly IMediator _mediator;
-    public CustomerController(IMediator mediator)
+    public CustomersController(IMediator mediator)
     {
         _mediator = mediator;
     }
 
-    [HttpGet("id:guid")]
-    public async Task<ActionResult<CustomerDto>> Get([FromRoute] GetCustomer query)
+    [HttpGet]
+    [Route("{id}")]
+    public async Task<ActionResult<CustomerDto>> Get([FromRoute] GetCustomer.Query query)
     {
         var response = await _mediator.Send(query);
         return Ok(response);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] CreateCustomer command)
+    public async Task<IActionResult> Post([FromBody] CreateCustomer.Command command)
     {
         var response = await _mediator.Send(command);
         return Ok(response);
