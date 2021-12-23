@@ -26,6 +26,7 @@ public record ShippingAddress
         IsDefault = isDefault;
     }
 
+    private Guid Id;
     public string Name { get; }
     public string City { get; }
     public string Street { get; }

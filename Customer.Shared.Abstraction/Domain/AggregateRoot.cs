@@ -1,14 +1,13 @@
 ﻿namespace Customer.Shared.Abstraction.Domain;
 
-public abstract class AggregateRoot<T>
+public abstract class AggregateRoot<TId>: Entity<TId>
 {
-    public T Id { get; protected set; }
     public int Version { get; protected set; }
     public IEnumerable<IDomainEvent> Events => _events;
     private readonly List<IDomainEvent> _events = new ();
     
     private bool _versionIncremented;
-    
+
     protected void AddEvent(IDomainEvent @event)
     {
         if (!_events.Any() && !_versionIncremented)
@@ -16,6 +15,7 @@ public abstract class AggregateRoot<T>
             Version++;
             _versionIncremented = true;
         }
+        // save the event so it can be published outside the aggregate
         _events.Add(@event);
     }
 
@@ -28,4 +28,5 @@ public abstract class AggregateRoot<T>
         _versionIncremented = true;
     }
 
+    
 }

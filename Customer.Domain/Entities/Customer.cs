@@ -8,37 +8,40 @@ namespace Customer.Domain.Entities;
 
 public class Customer : AggregateRoot<CustomerId>
 {
-    public CustomerId Id { get; private set; }
-    private CustomerFirstName _firstName;
-    private CustomerLastName _lastName;
-    private CustomerAge _age;
-    private CustomerPhone _phone;
-    private Gender _gender;
-    private CustomerCountry _country;
-    private CustomerCity _city;
+   // public CustomerId Id { get; private set; }
+    public CustomerEmail Email { get; private set; }
+    public CustomerFirstName FirstName { get; private set; }
+    public CustomerLastName LastName { get; private set; }
+    public CustomerAge Age { get; private set; }
+    public CustomerPhone Phone { get; private set; }
+    public Gender Gender { get; private set; }
+    public CustomerCountry Country { get; private set; }
+    public CustomerCity City { get;  private set; }
 
     private readonly LinkedList<ShippingAddress> _shippingAddresses = new();
 
     private Customer()
     {
+        
     }
-    private Customer(CustomerId id, CustomerFirstName firstName, CustomerLastName lastName, CustomerAge age,
-        CustomerPhone phone, Gender gender, CustomerCountry country, CustomerCity city, LinkedList<ShippingAddress> addresses) 
-        : this(id, firstName, lastName, age, phone, gender, country, city)
+    private Customer(CustomerId id, CustomerEmail email, CustomerFirstName firstName, CustomerLastName lastName, CustomerAge age,
+        CustomerPhone phone, Gender gender, CustomerCountry country, CustomerCity city, ShippingAddress defaultAddresses) 
+        : this(id, email ,firstName, lastName, age, phone, gender, country, city)
     {
-        _shippingAddresses = addresses;
+        _shippingAddresses.AddFirst(defaultAddresses);
     }
-    internal Customer(CustomerId id, CustomerFirstName firstName, CustomerLastName lastName, CustomerAge age,
+    internal Customer(CustomerId id,CustomerEmail email, CustomerFirstName firstName, CustomerLastName lastName, CustomerAge age,
         CustomerPhone phone, Gender gender, CustomerCountry country, CustomerCity city)  
     {
         Id = id;
-        _firstName = firstName;
-        _lastName = lastName;
-        _age = age;
-        _phone = phone;
-        _gender = gender;
-        _country = country;
-        _city = city;
+        Email = email;
+        FirstName = firstName;
+        LastName = lastName;
+        Age = age;
+        Phone = phone;
+        Gender = gender;
+        Country = country;
+        City = city;
     }
 
     public void AddShippingAddress(ShippingAddress shippingAddress)
@@ -52,6 +55,12 @@ public class Customer : AggregateRoot<CustomerId>
         AddEvent(new ShippingAddressAdded(this, shippingAddress));
     }
 
+    public void RemoveShippingAddress(string shippingAddressName)
+    {
+        var address = GetShippingAddress(shippingAddressName);
+        _shippingAddresses.Remove(address);
+        AddEvent(new ShippingAddressRemoved(this, address));
+    }
     public void SetDefaultShippingAddress(string shippingAddressName)
     {
         var address = GetShippingAddress(shippingAddressName);
@@ -75,7 +84,6 @@ public class Customer : AggregateRoot<CustomerId>
         }
         return address;
     }
-     
 }
 
 

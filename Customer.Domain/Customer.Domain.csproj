@@ -7,9 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Factories" />
       <Folder Include="Policies" />
-      <Folder Include="Repositories" />
     </ItemGroup>
 
     <ItemGroup>
