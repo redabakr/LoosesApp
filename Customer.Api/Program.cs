@@ -1,3 +1,4 @@
+using Customer.Api.Endpoints;
 using Customer.Application;
 using Customer.Infrastructure;
 using Customer.Shared;
@@ -18,6 +19,8 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -31,6 +34,7 @@ app.UseShared();
 
 app.UseAuthorization();
 
-app.MapDefaultControllerRoute();
+app.MapCustomerEndpoints();
+//app.MapDefaultControllerRoute();
 
 app.Run();

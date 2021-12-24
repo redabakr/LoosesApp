@@ -1,6 +1,6 @@
-﻿using FluentValidation;
+﻿using Customer.Shared.Exceptions;
+using FluentValidation;
 using MediatR;
-using ValidationException = FluentValidation.ValidationException;
 
 namespace Customer.Application.Validation;
 
@@ -9,26 +9,34 @@ public class CommandHandlerValidationBehavior<TRequest, TResponse> : IPipelineBe
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
 
-    public CommandHandlerValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
+    public CommandHandlerValidationBehavior(IEnumerable<IValidator<TRequest>> validators) => _validators = validators;
+
+    public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
     {
-        _validators = validators;
-    }
-
-    public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
-    {
-        //var context = new ValidationContext(request);
-
-        var failures = _validators
-            .Select(v => v.Validate(request))
-            .SelectMany(result => result.Errors)
-            .Where(f => f != null)
-            .ToList();
-
-        if (failures.Count != 0)
+        if (!_validators.Any())
         {
-            throw new ValidationException(failures);
+            return await next();
         }
-
-        return next();
+        var requestType = request.GetType().Name;
+        var context = new ValidationContext<TRequest>(request);
+        var errorsDictionary = _validators
+            .Select(x => x.Validate(context))
+            .SelectMany(x => x.Errors)
+            .Where(x => x != null)
+            .GroupBy(
+                x => x.PropertyName,
+                x => x.ErrorMessage,
+                (propertyName, errorMessages) => new
+                {
+                    Key = propertyName,
+                    Values = errorMessages.Distinct().ToArray()
+                })
+            .ToDictionary(x => x.Key, x => x.Values);
+        if (errorsDictionary.Any())
+        {
+            throw new RequestValidationException(requestType, errorsDictionary);
+        }
+        return await next();
     }
 }
+

@@ -17,8 +17,9 @@ public class Customer : AggregateRoot<CustomerId>
     public Gender Gender { get; private set; }
     public CustomerCountry Country { get; private set; }
     public CustomerCity City { get;  private set; }
-
+    
     private readonly LinkedList<ShippingAddress> _shippingAddresses = new();
+    public IReadOnlyCollection<ShippingAddress> ShippingAddresses => _shippingAddresses;
 
     private Customer()
     {

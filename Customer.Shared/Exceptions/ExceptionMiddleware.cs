@@ -11,6 +11,19 @@ internal sealed class ExceptionMiddleware : IMiddleware
         {
             await next(context);
         }
+        catch (RequestValidationException ex)
+        {
+            context.Response.StatusCode = 400;
+            context.Response.Headers.Add("content-type", "application/json");
+            var json = JsonSerializer.Serialize(new 
+                {
+                    ErrorCode = "validation_error",
+                    ex.Message, 
+                    Validations = ex.ErrorsDictionary
+                }
+            );
+            await context.Response.WriteAsync(json);
+        }
         catch (CustomerServiceBaseException ex)
         {
             context.Response.StatusCode = 400;
@@ -29,7 +42,7 @@ internal sealed class ExceptionMiddleware : IMiddleware
             await context.Response.WriteAsync(json);
         }
     }
-        
-    public static string ToUnderscoreCase(string value)
+
+    private static string ToUnderscoreCase(string value)
         => string.Concat((value ?? string.Empty).Select((x, i) => i > 0 && char.IsUpper(x) && !char.IsUpper(value[i-1]) ? $"_{x}" : x.ToString())).ToLower();
 }

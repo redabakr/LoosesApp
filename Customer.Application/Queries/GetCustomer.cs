@@ -9,6 +9,11 @@ public class GetCustomer
     public class Query : IRequest<CustomerDto>
     {
         public Guid Id { get; set; }
+
+        public Query(Guid id)
+        {
+            Id = id;
+        }
     }
     protected class QueryHandler: IRequestHandler<Query,CustomerDto>
     {

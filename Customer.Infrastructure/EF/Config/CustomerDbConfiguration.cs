@@ -47,8 +47,12 @@ internal sealed class CustomerDbConfiguration : IEntityTypeConfiguration<Domain.
         builder.Property(x => x.Age)
             .HasConversion(v => v.Value, v=> new CustomerAge(v))
             .HasColumnName("Age");
+
+        var navigation = builder.Metadata.FindNavigation(nameof(Domain.Entities.Customer.ShippingAddresses));
+        //EF access the OrderItem collection property through its backing field
+        navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
         
-        builder.HasMany(typeof(ShippingAddress), "_shippingAddresses");
+        //builder.HasMany(typeof(ShippingAddress), "_shippingAddresses");
     }
 
     public void Configure(EntityTypeBuilder<ShippingAddress> builder)

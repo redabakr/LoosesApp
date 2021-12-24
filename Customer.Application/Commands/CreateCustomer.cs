@@ -10,20 +10,10 @@ namespace Customer.Application.Commands;
 
 public class CreateCustomer
 {
-    public class Command: IRequest
-    {
-        public Guid Id { get;  set; }
-        public string Email { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public uint Age { get; set; }
-        public string Phone { get; set; }
-        public string Country { get; set; }
-        public string City { get; set; }
-        public Gender Gender { get; set; }
-    }//Command
-
-    protected class CommandValidator : AbstractValidator<Command>
+    public sealed record Command(Guid Id, string Email, string FirstName, string LastName, uint Age, string Phone,
+        string Country, string City, Gender Gender) : IRequest;
+    
+    public sealed class CommandValidator : AbstractValidator<Command>
     {
         private const uint MaxAge = 12;
         public CommandValidator()
@@ -35,7 +25,7 @@ public class CreateCustomer
             RuleFor(x => x.Phone).NotEmpty();
         }
     }//CommandValidator
-    protected class CommandHandler : IRequestHandler<Command>
+    protected sealed class CommandHandler : IRequestHandler<Command>
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly ICustomerFactory _customerFactory;

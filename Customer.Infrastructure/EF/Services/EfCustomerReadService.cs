@@ -1,17 +1,36 @@
 ﻿using Customer.Application.DTO;
 using Customer.Application.Services;
+using Customer.Domain.ValueObjects;
+using Microsoft.EntityFrameworkCore;
 
 namespace Customer.Infrastructure.EF.Services;
 
-public class EfCustomerReadService : ICustomerReadService
+internal sealed class EfCustomerReadService : ICustomerReadService
 {
-    public Task<CustomerDto> GetCustomerDetails(Guid Id)
+    private readonly DbSet<Domain.Entities.Customer> _customers;
+
+    public EfCustomerReadService(CustomerDbContext context)
     {
-        throw new NotImplementedException();
+        _customers = context.Customers;
     }
 
-    public Task<bool> ExistsByEmailAsync(string email)
+    public async Task<CustomerDto> GetCustomerDetails(Guid id)
     {
-        throw new NotImplementedException();
+    var customer = await _customers
+        .Include(x=> x.ShippingAddresses)
+        .SingleOrDefaultAsync(x => x.Id == new CustomerId(id));
+    if (customer is null) return new CustomerDto();
+    return new CustomerDto()
+    {
+        Id = customer.Id,
+        FirstName = customer.FirstName,
+        LastName = customer.LastName,
+        Email = customer.Email,
+        Country = customer.Country,
+        City = customer.City,
+        Age = customer.Age.Value
+    };
     }
+
+    public async Task<bool> ExistsByEmailAsync(string email) => await _customers.AnyAsync(x => x.Email == email);
 }
