@@ -15,7 +15,7 @@ builder.Services.AddApplication();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen( options => options.CustomSchemaIds(type => type.ToString()));
 
 var app = builder.Build();
 
@@ -35,6 +35,5 @@ app.UseShared();
 app.UseAuthorization();
 
 app.MapCustomerEndpoints();
-//app.MapDefaultControllerRoute();
 
 app.Run();

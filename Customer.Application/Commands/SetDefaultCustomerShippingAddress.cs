@@ -5,15 +5,11 @@ using MediatR;
 
 namespace Customer.Application.Commands;
 
-public class SetDefaultCustomerShippingAddress
+public sealed class SetDefaultCustomerShippingAddress
 {
-    public class Command : IRequest
-    {
-        public Guid CustomerId { get; set; }
-        public string ShippingAddressName { get; }
-    }
+    public sealed record Command(Guid CustomerId, string ShippingAddressName) : IRequest;
 
-    public class CommandValidator : AbstractValidator<Command>
+    public sealed class CommandValidator : AbstractValidator<Command>
     {
         public CommandValidator()
         {
@@ -21,7 +17,7 @@ public class SetDefaultCustomerShippingAddress
             RuleFor(x => x.ShippingAddressName).NotEmpty();
         }
     }
-    protected class CommandHandler: IRequestHandler<Command>
+    private sealed class CommandHandler: IRequestHandler<Command>
     {
         private readonly ICustomerRepository _customerRepository;
 

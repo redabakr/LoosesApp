@@ -4,18 +4,10 @@ using MediatR;
 
 namespace Customer.Application.Queries;
 
-public class GetCustomer
+public sealed class GetCustomer
 {
-    public class Query : IRequest<CustomerDto>
-    {
-        public Guid Id { get; set; }
-
-        public Query(Guid id)
-        {
-            Id = id;
-        }
-    }
-    protected class QueryHandler: IRequestHandler<Query,CustomerDto>
+    public sealed record Query(Guid Id) : IRequest<CustomerDto>;
+    private sealed class QueryHandler: IRequestHandler<Query,CustomerDto>
     {
         private readonly ICustomerReadService _customerReadService;
 
@@ -24,7 +16,7 @@ public class GetCustomer
             _customerReadService = customerReadService;
         }
 
-        public async Task<CustomerDto> Handle(Query query, CancellationToken cancellationToken)
+        public async Task<CustomerDto?> Handle(Query query, CancellationToken cancellationToken)
         {
             return await _customerReadService.GetCustomerDetails(query.Id);
         }

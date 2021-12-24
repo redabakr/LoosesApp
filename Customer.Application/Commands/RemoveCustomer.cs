@@ -5,21 +5,18 @@ using MediatR;
 
 namespace Customer.Application.Commands;
 
-public class RemoveCustomer
+public sealed class RemoveCustomer
 {
-    public class Command : IRequest
-    {
-        public Guid CustomerId { get; set; }
-    }
+    public sealed record Command(Guid Id) : IRequest;
 
-    public class CommandValidator : AbstractValidator<Command>
+    public sealed class CommandValidator : AbstractValidator<Command>
     {
         public CommandValidator()
         {
-            RuleFor(x => x.CustomerId).NotEmpty().NotNull();
+            RuleFor(x => x.Id).NotEmpty().NotNull();
         }
     }
-    protected class CommandHandler: IRequestHandler<Command>
+    private sealed class CommandHandler: IRequestHandler<Command>
     {
         private readonly ICustomerRepository _customerRepository;
 
@@ -30,8 +27,8 @@ public class RemoveCustomer
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
-            var customer = await _customerRepository.GetAsync(request.CustomerId);
-            if (customer is null) throw new CustomerNotFoundException(request.CustomerId);
+            var customer = await _customerRepository.GetAsync(request.Id);
+            if (customer is null) throw new CustomerNotFoundException(request.Id);
            
             await _customerRepository.DeleteAsync(customer);
             return Unit.Value;

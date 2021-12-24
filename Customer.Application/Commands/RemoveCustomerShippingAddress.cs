@@ -5,23 +5,19 @@ using MediatR;
 
 namespace Customer.Application.Commands;
 
-public class RemoveCustomerShippingAddress
+public sealed class RemoveCustomerShippingAddress
 {
-    public class Command : IRequest
-    {
-        public Guid CustomerId { get; set; }
-        public string Name { get; }
-    }
+    public sealed record Command(Guid CustomerId, string ShippingAddressName) : IRequest;
 
-    public class CommandValidator : AbstractValidator<Command>
+    public sealed class CommandValidator : AbstractValidator<Command>
     {
         public CommandValidator()
         {
             RuleFor(x => x.CustomerId).NotEmpty().NotNull();
-            RuleFor(x => x.Name).NotEmpty();
+            RuleFor(x => x.ShippingAddressName).NotEmpty();
         }
     }
-    protected class CommandHandler: IRequestHandler<Command>
+    private sealed class CommandHandler: IRequestHandler<Command>
     {
         private readonly ICustomerRepository _customerRepository;
 
@@ -35,7 +31,7 @@ public class RemoveCustomerShippingAddress
             var customer = await _customerRepository.GetAsync(request.CustomerId);
             if (customer is null) throw new CustomerNotFoundException(request.CustomerId);
            
-            customer.RemoveShippingAddress(request.Name);
+            customer.RemoveShippingAddress(request.ShippingAddressName);
             
             await _customerRepository.UpdateAsync(customer);
             return Unit.Value;

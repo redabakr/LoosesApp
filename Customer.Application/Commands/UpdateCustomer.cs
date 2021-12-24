@@ -8,9 +8,9 @@ using MediatR;
 
 namespace Customer.Application.Commands;
 
-public sealed class CreateCustomer
+public sealed class UpdateCustomer
 {
-    public sealed record Command(Guid Id, string Email, string FirstName, string LastName, uint Age, string Phone,
+    public sealed record Command(Guid Id, string FirstName, string LastName, uint Age, string Phone,
         string Country, string City, Gender Gender) : IRequest;
     
     public sealed class CommandValidator : AbstractValidator<Command>
@@ -21,15 +21,15 @@ public sealed class CreateCustomer
             RuleFor(x => x.FirstName).NotEmpty();
             RuleFor(x => x.LastName).NotEmpty();
             RuleFor(x => x.Age).GreaterThan(MaxAge);
-            RuleFor(x => x.Email).NotEmpty().EmailAddress();
             RuleFor(x => x.Phone).NotEmpty();
         }
     }//CommandValidator
     private sealed class CommandHandler : IRequestHandler<Command>
     {
         private readonly ICustomerRepository _customerRepository;
-        private readonly ICustomerFactory _customerFactory;
         private readonly ICustomerReadService _customerReadService;
+        private readonly ICustomerFactory _customerFactory;
+
         public CommandHandler(ICustomerRepository customerRepository,
             ICustomerFactory customerFactory,
             ICustomerReadService customerReadService)
@@ -41,21 +41,15 @@ public sealed class CreateCustomer
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
-            // check if customer with the same email exists
-            if (await _customerReadService.ExistsByEmailAsync(request.Email))
-            {
-                throw new CustomerAlreadyExistsException(request.Email);
-            }
+            var customer = await _customerRepository.GetAsync(request.Id);
+            if (customer is null) throw new CustomerNotFoundException(request.Id);
+
+            //TODO update customer logic 
             
-            var customer = _customerFactory.Create(request.Id, request.Email, request.FirstName, request.LastName,
-                request.Age, request.Phone, request.Gender, request.Country, request.City);
-        
-            await _customerRepository.AddAsync(customer);
+            await _customerRepository.UpdateAsync(customer);
         
             return Unit.Value;
         }
     }//CommandHandler
-
-    
 }
 

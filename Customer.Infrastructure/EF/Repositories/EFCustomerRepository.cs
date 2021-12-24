@@ -16,7 +16,7 @@ internal sealed class EfCustomerRepository: ICustomerRepository
     }
 
     public async Task<Domain.Entities.Customer?> GetAsync(CustomerId id) =>
-       await _customers.Include("_shippingAddresses").FirstOrDefaultAsync(x => x.Id == id);
+       await _customers.Include(x=> x.ShippingAddresses).FirstOrDefaultAsync(x => x.Id == id);
     public async Task AddAsync(Domain.Entities.Customer customer)
     {
         await _customers.AddAsync(customer);

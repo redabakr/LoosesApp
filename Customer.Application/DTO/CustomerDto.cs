@@ -2,15 +2,5 @@
 
 namespace Customer.Application.DTO;
 
-public class CustomerDto
-{
-    public Guid Id { get;  set; }
-    public string Email { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public uint Age { get; set; }
-    public string Phone { get; set; }
-    public string Country { get; set; }
-    public string City { get; set; }
-    public Gender Gender { get; set; }
-}
+public record CustomerDto(Guid Id, string Email, string FirstName, string LastName, uint Age, string Phone,
+    string Country, string City, Gender Gender, IEnumerable<ShippingAddressDto>? ShippingAddresses);

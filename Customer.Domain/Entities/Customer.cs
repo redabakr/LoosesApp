@@ -64,16 +64,16 @@ public class Customer : AggregateRoot<CustomerId>
     }
     public void SetDefaultShippingAddress(string shippingAddressName)
     {
-        var address = GetShippingAddress(shippingAddressName);
-        var defaultAddress = _shippingAddresses.FirstOrDefault(x => x.IsDefault);
-        if (defaultAddress is not null)
+        var address1 = GetShippingAddress(shippingAddressName);
+        var address2 = _shippingAddresses.FirstOrDefault(x => x.IsDefault);
+        if (address2 is not null && address2.Name != address1.Name)
         {
-            var oldDefaultedAddress = defaultAddress with { IsDefault = true };
-            _shippingAddresses.Find(defaultAddress)!.Value = oldDefaultedAddress;
+            var newAddress2 = address2 with { IsDefault = false };
+            _shippingAddresses.Find(address2)!.Value = newAddress2;
         }
-        var newDefaultAddress = address with { IsDefault = true };
-        _shippingAddresses.Find(address)!.Value = newDefaultAddress;
-        AddEvent(new DefaultShippingAddressUpdated(this, address));
+        var newAddress1 = address1 with { IsDefault = true };
+        _shippingAddresses.Find(address1)!.Value = newAddress1;
+        AddEvent(new DefaultShippingAddressUpdated(this, newAddress1));
     }
 
     private ShippingAddress GetShippingAddress(string name)

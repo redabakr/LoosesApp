@@ -6,19 +6,12 @@ using MediatR;
 
 namespace Customer.Application.Commands;
 
-public class AddCustomerShippingAddress
+public sealed class AddCustomerShippingAddress
 {
-    public class Command : IRequest
-    {
-        public Guid CustomerId { get; set; }
-        public string Name { get; }
-        public string City { get; }
-        public string Street { get; }
-        public string Description { get;  }
-        public bool IsDefault { get; init; }
-    }
+    public sealed record Command
+        (Guid CustomerId, string Name, string City, string Street, string Description, bool IsDefault) : IRequest;
 
-    public class CommandValidator : AbstractValidator<Command>
+    public sealed class CommandValidator : AbstractValidator<Command>
     {
         public CommandValidator()
         {
@@ -28,7 +21,7 @@ public class AddCustomerShippingAddress
             RuleFor(x => x.Street).NotEmpty();
         }
     }
-    protected class CommandHandler: IRequestHandler<Command>
+    private sealed class CommandHandler: IRequestHandler<Command>
     {
         private readonly ICustomerRepository _customerRepository;
 
@@ -42,7 +35,7 @@ public class AddCustomerShippingAddress
             var customer = await _customerRepository.GetAsync(request.CustomerId);
             if (customer is null) throw new CustomerNotFoundException(request.CustomerId);
 
-            var shippingAddress = new ShippingAddress(request.Name, request.City, request.Street, request.Description);
+            var shippingAddress = new ShippingAddress(request.Name, request.City, request.Street, request.Description, request.IsDefault);
             customer.AddShippingAddress(shippingAddress);
             if (shippingAddress.IsDefault)
             {
