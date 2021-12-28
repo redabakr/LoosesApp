@@ -4,8 +4,9 @@ namespace Looses.Web.Services;
 
 public interface ILoosesApiService
 {
-    Task<IEnumerable<WellModel>> GetWells();
-    Task<IEnumerable<LoosesModel>> GetLooses();
-    Task<IEnumerable<LoosesModel>> CreateLossRecord();
-    Task<IEnumerable<LoosesModel>> CreateLossRecords();
+    Task<IEnumerable<WellReadModel>> GetWells();
+    Task<IEnumerable<LossReadModel>> GetLooses(string wellName);
+    Task<LossReadModel> CreateLossRecord(LossWriteModel lossRecord);
+    Task<bool> CreateLossRecords(IEnumerable<LossWriteModel> lossRecords);
+    Task<bool> CalculateOfflineDays();
 }

@@ -9,7 +9,7 @@ namespace Looses.Application.Commands;
 
 public sealed class CreateLooseRecords
 {
-    public sealed record Command(List<LoosesData> LoosesRecords) : IRequest;
+    public sealed record Command(List<LossWriteDto> LoosesRecords) : IRequest;
     
     public sealed class CommandValidator : AbstractValidator<Command>
     {
@@ -19,7 +19,7 @@ public sealed class CreateLooseRecords
         }
     }//CommandValidator
 
-    private sealed class LoosesDataValidator : AbstractValidator<LoosesData>
+    private sealed class LoosesDataValidator : AbstractValidator<LossWriteDto>
     {
         public LoosesDataValidator()
         {

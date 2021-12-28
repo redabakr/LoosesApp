@@ -14,6 +14,5 @@ builder.Services.AddHttpClient<ILoosesApiService, LoosesApiService>(client =>
     client.BaseAddress = new Uri("https://localhost:7221");
 });
 
-//builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddSyncfusionBlazor();
 await builder.Build().RunAsync();

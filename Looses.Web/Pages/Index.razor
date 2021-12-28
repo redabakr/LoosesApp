@@ -2,19 +2,24 @@
 
 @inherits IndexBase
 
-
 <h3>Looses</h3>
+<SfSpinner @bind-Visible="SpinnerVisible" Label="Loading Data..." Size="50" Type="SpinnerType.Bootstrap4" />
 
-@if (Wells == null)
+@if (LossRecords != null)
 {
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <SfGrid DataSource="@Wells">
+    <SfGrid DataSource="@LossRecords" AllowPaging="true" AllowSorting="true">
+        <GridPageSettings PageSize="5" PageSizes="true" PageCount="3" />
+        <GridSortSettings AllowUnsort="true">
+            <GridSortColumns>
+                <GridSortColumn Field="LossDate" Direction="SortDirection.Descending"></GridSortColumn>
+            </GridSortColumns>
+        </GridSortSettings>
         <GridColumns>
-            <GridColumn Field=@nameof(WellModel.Id) HeaderText="Id"/>
-            <GridColumn Field=@nameof(WellModel.Name) HeaderText="Name"/>
+            <GridColumn Field=@nameof(LossReadModel.Id) HeaderText="Id"/>
+            <GridColumn Field=@nameof(LossReadModel.WellName) HeaderText="Well Name"/>
+            <GridColumn Field=@nameof(LossReadModel.EventName) HeaderText="Event Name"/>
+            <GridColumn Field=@nameof(LossReadModel.LoosDate) HeaderText="Loos Date"/>
+            <GridColumn Field=@nameof(LossReadModel.DaysOffline) HeaderText="Days Offline" AllowSorting="false"/>
         </GridColumns>
     </SfGrid>
 }

@@ -4,10 +4,11 @@ namespace Looses.Application.Services;
 
 public interface ILoosesReadService
 {
-    Task<LoosesDto?> GetlooseDetails(int Id);
+    Task<LossReadDto?> GetlooseDetails(int Id);
 
     Task<bool> ExistsWellByNameAsync(string wellName);
-    Task<IEnumerable<LoosesDto>> GetLooses(string? wellName );
-    Task<IEnumerable<WellDto>> GetWells();
-    Task<IEnumerable<LoosesDto>> GetLoosesForWell(string wellName, DateTime previousLossDate );
+    Task<IEnumerable<LossReadDto>> GetLooses(string? wellName );
+    Task<IEnumerable<WellReadDto>> GetWells();
+    Task<IEnumerable<LossReadDto>> GetLoosesForWell(string wellName, DateTime previousLossDate );
+    Task<bool> LossRecordForSameDayExistsAsync(string wellName, string eventName, DateTime lossDate);
 }

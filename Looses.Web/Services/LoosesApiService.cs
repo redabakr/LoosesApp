@@ -11,23 +11,36 @@ public class LoosesApiService : ILoosesApiService
     {
         _httpClient = httpClient;
     }
-    public async Task<IEnumerable<WellModel>> GetWells()
+    public async Task<IEnumerable<WellReadModel>> GetWells()
     {
-       return await _httpClient.GetFromJsonAsync<IEnumerable<WellModel>>("/wells");
+       return await _httpClient.GetFromJsonAsync<IEnumerable<WellReadModel>>("/wells");
     }
 
-    public Task<IEnumerable<LoosesModel>> GetLooses()
+    public async Task<IEnumerable<LossReadModel>> GetLooses(string wellName)
+    {
+        return await _httpClient.GetFromJsonAsync<IEnumerable<LossReadModel>>($"/looses?wellName={wellName}");
+    }
+
+    public async Task<LossReadModel> CreateLossRecord(LossWriteModel lossRecord)
+    {
+        var postBody = new { Title = "Blazor POST Request Example" };
+
+        using var response = await _httpClient.PostAsJsonAsync("/loss", postBody);
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadFromJsonAsync<LossReadModel>();
+        }
+        return null;
+    }
+
+    public Task<bool> CreateLossRecords(IEnumerable<LossWriteModel> lossRecords)
     {
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<LoosesModel>> CreateLossRecord()
+    public async Task<bool> CalculateOfflineDays()
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<IEnumerable<LoosesModel>> CreateLossRecords()
-    {
-        throw new NotImplementedException();
+        var response = await _httpClient.PutAsync("/calculate-days-offline", null);
+        return response.IsSuccessStatusCode;
     }
 }

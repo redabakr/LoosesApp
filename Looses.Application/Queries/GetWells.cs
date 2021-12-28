@@ -6,8 +6,8 @@ namespace Looses.Application.Queries;
 
 public sealed class GetWells
 {
-    public sealed record Query() : IRequest<IEnumerable<WellDto>>;
-    private sealed class QueryHandler: IRequestHandler<Query,IEnumerable<WellDto>>
+    public sealed record Query() : IRequest<IEnumerable<WellReadDto>>;
+    private sealed class QueryHandler: IRequestHandler<Query,IEnumerable<WellReadDto>>
     {
         private readonly ILoosesReadService _loosesReadService;
 
@@ -16,7 +16,7 @@ public sealed class GetWells
             _loosesReadService = loosesReadService;
         }
 
-        public async Task<IEnumerable<WellDto>> Handle(Query query, CancellationToken cancellationToken)
+        public async Task<IEnumerable<WellReadDto>> Handle(Query query, CancellationToken cancellationToken)
         {
             return await _loosesReadService.GetWells();
         }

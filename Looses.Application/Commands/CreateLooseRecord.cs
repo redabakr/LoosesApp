@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Looses.Application.DTO;
 using Looses.Application.Exceptions;
 using Looses.Application.Services;
 using Looses.Domain.Repositories;
@@ -8,7 +9,7 @@ namespace Looses.Application.Commands;
 
 public sealed class CreateLooseRecord
 {
-    public sealed record Command(string WellName, string EventName, DateTime LossDate) : IRequest;
+    public sealed record Command(string WellName, string EventName, DateTime LossDate) : IRequest<LossReadDto>;
     
     public sealed class CommandValidator : AbstractValidator<Command>
     {
@@ -23,7 +24,7 @@ public sealed class CreateLooseRecord
             return !date.Equals(default);
         }
     }//CommandValidator
-    private sealed class CommandHandler : IRequestHandler<Command>
+    private sealed class CommandHandler : IRequestHandler<Command,LossReadDto>
     {
         private readonly ILooseRepository _looseRepository;
         private readonly ILoosesReadService _loosesReadService;
@@ -34,13 +35,20 @@ public sealed class CreateLooseRecord
             _loosesReadService = loosesReadService;
         }
 
-        public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<LossReadDto> Handle(Command request, CancellationToken cancellationToken)
         {
             var isWellExists = await _loosesReadService.ExistsWellByNameAsync(request.WellName);
             // check if well exists
             if (!isWellExists)
             {
                 throw new WellNotFoundException(request.WellName);
+            }
+            
+            var isLossRecordExists = await _loosesReadService.LossRecordForSameDayExistsAsync(request.WellName, request.EventName, request.LossDate);
+            // check if well exists
+            if (isLossRecordExists)
+            {
+                throw new LossAlreadyReportedException(request.WellName, request.EventName);
             }
             
             var looseRecord = new Domain.Entities.Looses(request.WellName, request.EventName, request.LossDate);
@@ -59,8 +67,8 @@ public sealed class CreateLooseRecord
             
             await _looseRepository.AddAsync(looseRecord);
             await _looseRepository.SaveChangesAsync();
-        
-            return Unit.Value;
+
+            return looseRecord.AsDto();
         }
     }//CommandHandler
     

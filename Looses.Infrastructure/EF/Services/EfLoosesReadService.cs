@@ -1,4 +1,5 @@
-﻿using Looses.Application.DTO;
+﻿using Looses.Application;
+using Looses.Application.DTO;
 using Looses.Application.Services;
 using Looses.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -19,30 +20,35 @@ internal sealed class EfLoosesReadService : ILoosesReadService
         _wells = context.Wells;
     }
 
-    public async Task<LoosesDto?> GetlooseDetails(int id)
+    public async Task<LossReadDto?> GetlooseDetails(int id)
     {
         var entity = await _looses
             .Include(x => x.Well)
             .AsNoTracking()
             .SingleOrDefaultAsync(x => x.Id == id);
-        if (entity is null) return null;
-        return AsDto(entity);
+        return entity?.AsDto();
     }
 
+    public async Task<bool> LossRecordForSameDayExistsAsync(string wellName, string eventName, DateTime lossDate)
+    {
+        return await _looses.AnyAsync(x => x.WellName == wellName && x.EventName == eventName && x.LossDate == lossDate);
+    }
+
+    
     public async Task<bool> ExistsWellByNameAsync(string wellName)
     {
         var cacheKey = $"{wellName}-EXISTS";
-        var output = _memoryCache.Get<bool?>(cacheKey);
-        if (output is not null) return output.Value;
+        var output = _memoryCache.Get<string>(cacheKey);
+        if (output is not null) return bool.Parse(output);
         
         var isExist = await _wells.AnyAsync(x => x.Name == wellName);
-        _memoryCache.Set(cacheKey, isExist, TimeSpan.FromMinutes(10));
+        _memoryCache.Set(cacheKey, isExist? "true" : "false", TimeSpan.FromMinutes(10));
         return isExist;
     }
 
     //public async Task<bool> ExistsByEmailAsync(string email) => await _looses.AnyAsync(x => x.Email == email);
 
-    public async Task<IEnumerable<LoosesDto>> GetLooses(string? wellName)
+    public async Task<IEnumerable<LossReadDto>> GetLooses(string? wellName)
     {
         var dbQuery = _looses
             .Include(x => x.Well)
@@ -58,34 +64,23 @@ internal sealed class EfLoosesReadService : ILoosesReadService
             .AsNoTracking()
             .OrderBy(x=> x.WellName)
             .ThenBy(x=>x.LossDate)
-            .Select(x => AsDto(x))
+            .Select(x => x.AsDto())
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<WellDto>> GetWells()
+    public async Task<IEnumerable<WellReadDto>> GetWells()
     {
         return await _wells
             .AsNoTracking()
-            .Select(x=> new WellDto(x.Id, x.Name))
+            .Select(x=> new WellReadDto(x.Id, x.Name))
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<LoosesDto>> GetLoosesForWell(string wellName, DateTime previousLossDate)
+    public async Task<IEnumerable<LossReadDto>> GetLoosesForWell(string wellName, DateTime previousLossDate)
     {
         var dbQuery = _looses
                 .Where(t => t.WellName == wellName && t.LossDate >= previousLossDate);
           
-        return await dbQuery.Select(x => AsDto(x)).OrderByDescending(x=> x.LoosDate).ToListAsync();
-    }
-
-    private static LoosesDto AsDto(Looses.Domain.Entities.Looses entity)
-    {
-        return new LoosesDto(
-                entity.Id,
-                entity.WellName,
-                entity.EventName,
-                 entity.LossDate,
-                entity.DaysOffline
-        );
+        return await dbQuery.Select(x => x.AsDto()).OrderByDescending(x=> x.LoosDate).ToListAsync();
     }
 }
