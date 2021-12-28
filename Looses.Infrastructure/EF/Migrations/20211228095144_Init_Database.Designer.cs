@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Looses.Infrastructure.EF.Migrations
 {
     [DbContext(typeof(LoosesDbContext))]
-    [Migration("20211226131057_Init_Database")]
+    [Migration("20211228095144_Init_Database")]
     partial class Init_Database
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,19 +61,45 @@ namespace Looses.Infrastructure.EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.HasKey("Name");
 
                     b.HasIndex("Id")
-                        .IsUnique()
-                        .HasFilter("[Id] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("Name")
                         .IsUnique();
 
                     b.ToTable("Wells", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Name = "R-001",
+                            Id = 1
+                        },
+                        new
+                        {
+                            Name = "R-002",
+                            Id = 2
+                        },
+                        new
+                        {
+                            Name = "R-003",
+                            Id = 3
+                        },
+                        new
+                        {
+                            Name = "R-004",
+                            Id = 4
+                        },
+                        new
+                        {
+                            Name = "R-005",
+                            Id = 5
+                        });
                 });
 
             modelBuilder.Entity("Looses.Domain.Entities.Looses", b =>

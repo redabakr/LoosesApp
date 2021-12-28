@@ -14,7 +14,7 @@ namespace Looses.Infrastructure.EF.Migrations
                 columns: table => new
                 {
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,6 +43,18 @@ namespace Looses.Infrastructure.EF.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Wells",
+                columns: new[] { "Name", "Id" },
+                values: new object[,]
+                {
+                    { "R-001", 1 },
+                    { "R-002", 2 },
+                    { "R-003", 3 },
+                    { "R-004", 4 },
+                    { "R-005", 5 }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Looses_WellName",
                 table: "Looses",
@@ -52,8 +64,7 @@ namespace Looses.Infrastructure.EF.Migrations
                 name: "IX_Wells_Id",
                 table: "Wells",
                 column: "Id",
-                unique: true,
-                filter: "[Id] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Wells_Name",

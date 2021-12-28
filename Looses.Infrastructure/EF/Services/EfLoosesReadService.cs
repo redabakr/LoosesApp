@@ -42,7 +42,7 @@ internal sealed class EfLoosesReadService : ILoosesReadService
 
     //public async Task<bool> ExistsByEmailAsync(string email) => await _looses.AnyAsync(x => x.Email == email);
 
-    public async Task<IEnumerable<LoosesDto>> GetLooses(string wellName)
+    public async Task<IEnumerable<LoosesDto>> GetLooses(string? wellName)
     {
         var dbQuery = _looses
             .Include(x => x.Well)
@@ -59,6 +59,14 @@ internal sealed class EfLoosesReadService : ILoosesReadService
             .OrderBy(x=> x.WellName)
             .ThenBy(x=>x.LossDate)
             .Select(x => AsDto(x))
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<WellDto>> GetWells()
+    {
+        return await _wells
+            .AsNoTracking()
+            .Select(x=> new WellDto(x.Id, x.Name))
             .ToListAsync();
     }
 

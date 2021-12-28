@@ -59,19 +59,45 @@ namespace Looses.Infrastructure.EF.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.HasKey("Name");
 
                     b.HasIndex("Id")
-                        .IsUnique()
-                        .HasFilter("[Id] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("Name")
                         .IsUnique();
 
                     b.ToTable("Wells", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Name = "R-001",
+                            Id = 1
+                        },
+                        new
+                        {
+                            Name = "R-002",
+                            Id = 2
+                        },
+                        new
+                        {
+                            Name = "R-003",
+                            Id = 3
+                        },
+                        new
+                        {
+                            Name = "R-004",
+                            Id = 4
+                        },
+                        new
+                        {
+                            Name = "R-005",
+                            Id = 5
+                        });
                 });
 
             modelBuilder.Entity("Looses.Domain.Entities.Looses", b =>

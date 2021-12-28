@@ -6,7 +6,7 @@ namespace Looses.Application.Queries;
 
 public sealed class GetLooses
 {
-    public sealed record Query(string WellName ) : IRequest<IEnumerable<LoosesDto>>;
+    public sealed record Query(string? WellName ) : IRequest<IEnumerable<LoosesDto>>;
     private sealed class QueryHandler: IRequestHandler<Query,IEnumerable<LoosesDto>>
     {
         private readonly ILoosesReadService _loosesReadService;

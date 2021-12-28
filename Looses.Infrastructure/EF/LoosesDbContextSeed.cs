@@ -9,11 +9,11 @@ internal static class LoosesDbContextSeed
         // Seed, if necessary
         if (!context.Wells.Any())
         {
-            context.Wells.Add(new Well("R-001"));
-            context.Wells.Add(new Well("R-002"));
-            context.Wells.Add(new Well("R-003"));
-            context.Wells.Add(new Well("R-004"));
-            context.Wells.Add(new Well("R-005"));
+            context.Wells.Add(new Well(1,"R-001"));
+            context.Wells.Add(new Well(2,"R-002"));
+            context.Wells.Add(new Well(3,"R-003"));
+            context.Wells.Add(new Well(4,"R-004"));
+            context.Wells.Add(new Well(5,"R-005"));
 
             await context.SaveChangesAsync();
         }
