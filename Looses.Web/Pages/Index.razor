@@ -4,7 +4,10 @@
 
 <h3>Looses</h3>
 <SfSpinner @bind-Visible="SpinnerVisible" Label="Loading Data..." Size="50" Type="SpinnerType.Bootstrap4" />
-
+@if(ErrorLoading)
+{
+    <p><em> Error loading wells data...</em></p>
+}
 @if (LossRecords != null)
 {
     <SfGrid DataSource="@LossRecords" AllowPaging="true" AllowSorting="true">

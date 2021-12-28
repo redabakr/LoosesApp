@@ -13,19 +13,41 @@ public class LoosesApiService : ILoosesApiService
     }
     public async Task<IEnumerable<WellReadModel>> GetWells()
     {
-       return await _httpClient.GetFromJsonAsync<IEnumerable<WellReadModel>>("/wells");
+        try
+        {
+            return await _httpClient.GetFromJsonAsync<IEnumerable<WellReadModel>>("/wells");
+        }
+        catch
+        {
+            
+        }
+
+        return new List<WellReadModel>();
     }
 
     public async Task<IEnumerable<LossReadModel>> GetLooses(string wellName)
     {
-        return await _httpClient.GetFromJsonAsync<IEnumerable<LossReadModel>>($"/looses?wellName={wellName}");
+        try
+        {
+            var response =
+                await _httpClient.GetAsync(
+                    $"/looses?wellName={wellName}"); //await _httpClient.GetFromJsonAsync<IEnumerable<LossReadModel>>($"/looses?wellName={wellName}");
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<IEnumerable<LossReadModel>>();
+            }
+        }
+        catch
+        {
+            
+        }
+
+        return new List<LossReadModel>();
     }
 
     public async Task<LossReadModel> CreateLossRecord(LossWriteModel lossRecord)
     {
-        var postBody = new { Title = "Blazor POST Request Example" };
-
-        using var response = await _httpClient.PostAsJsonAsync("/loss", postBody);
+        using var response = await _httpClient.PostAsJsonAsync("/loss", lossRecord);
         if (response.IsSuccessStatusCode)
         {
             return await response.Content.ReadFromJsonAsync<LossReadModel>();

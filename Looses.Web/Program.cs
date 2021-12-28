@@ -11,7 +11,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddHttpClient<ILoosesApiService, LoosesApiService>(client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7221");
+    client.BaseAddress = new Uri("https://localhost:3000");
 });
 
 builder.Services.AddSyncfusionBlazor();

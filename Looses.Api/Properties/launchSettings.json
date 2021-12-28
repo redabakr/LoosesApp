@@ -9,12 +9,13 @@
     }
   },
   "profiles": {
-    "Customer.Api": {
+    "Looses.Api": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7221;http://localhost:5221",
+      "applicationUrl": "https://localhost:3000;http://localhost:2000",
+      "url":"https://localhost:3000;http://localhost:2000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

@@ -11,9 +11,10 @@
     "Looses.Web": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
+      "launchBrowser": false,
       "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
-      "applicationUrl": "https://localhost:7153;http://localhost:5167",
+      "applicationUrl": "https://localhost:3001;http://localhost:2001",
+      "url":"https://localhost:3001;http://localhost:2001",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
