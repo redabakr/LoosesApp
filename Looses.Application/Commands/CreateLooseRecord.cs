@@ -9,7 +9,7 @@ namespace Looses.Application.Commands;
 
 public sealed class CreateLooseRecord
 {
-    public sealed record Command(string WellName, string EventName, DateTime LossDate) : IRequest<LossReadDto>;
+    public sealed record Command(string WellName, string EventName, DateTime LoosDate) : IRequest<LossReadDto>;
     
     public sealed class CommandValidator : AbstractValidator<Command>
     {
@@ -17,7 +17,7 @@ public sealed class CreateLooseRecord
         {
             RuleFor(x => x.WellName).NotEmpty().MaximumLength(50).WithMessage("Well name must not exceed 50 characters.");;
             RuleFor(x => x.EventName).NotEmpty();
-            RuleFor(x => x.LossDate).Must(IsValidDate);
+            RuleFor(x => x.LoosDate).Must(IsValidDate);
         }
         private static bool IsValidDate(DateTime date)
         {
@@ -44,14 +44,14 @@ public sealed class CreateLooseRecord
                 throw new WellNotFoundException(request.WellName);
             }
             
-            var isLossRecordExists = await _loosesReadService.LossRecordForSameDayExistsAsync(request.WellName, request.EventName, request.LossDate);
+            var isLossRecordExists = await _loosesReadService.LossRecordForSameDayExistsAsync(request.WellName, request.EventName, request.LoosDate);
             // check if well exists
             if (isLossRecordExists)
             {
                 throw new LossAlreadyReportedException(request.WellName, request.EventName);
             }
             
-            var looseRecord = new Domain.Entities.Looses(request.WellName, request.EventName, request.LossDate);
+            var looseRecord = new Domain.Entities.Looses(request.WellName, request.EventName, request.LoosDate);
 
             // var daysOffline = 1;
             // var previousLossDate = request.LossDate.AddDays(-1);

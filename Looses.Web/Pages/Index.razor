@@ -7,6 +7,8 @@
  
 @if (LossRecords != null)
 {
+    <button type="button" class="btn btn-primary" style="margin-bottom: 10px;" @onclick="CalculateOffDays">Calculate Off Days</button>
+    
     <SfGrid DataSource="@LossRecords" AllowPaging="true" AllowSorting="true">
         <GridColumns>
             <GridColumn Field=@nameof(LossReadModel.Id) HeaderText="Id" />

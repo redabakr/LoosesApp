@@ -2,50 +2,30 @@
 
 @inherits LossEntryBase
 
-<SfSpinner @bind-Visible="spinnerVisible" Label="Loading Data..." Size="50" Type="SpinnerType.Bootstrap4" />
-@if(getWellsError)
+@if (WellRecords != null)
 {
-    <p><em> Error loading wells data...</em></p>
+    <button type="button" class="btn btn-primary" style="margin-bottom: 10px;" @onclick="PushData">Push Data</button>
+    <br/>
+    <SfGrid DataSource="@GridData" AllowPaging="true" Toolbar="@(new List<string>() { "Add", "Edit", "Update", "Delete", "Cancel" })">
+        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true"/>
+        <GridPageSettings PageSize="5"/>
+        <GridColumns>
+            <GridColumn IsPrimaryKey="true" Visible="false" Field=@nameof(LossWriteModel.Key) HeaderText="Key" />
+            <GridColumn Field=@nameof(LossWriteModel.WellName) HeaderText="WellName">
+                <EditTemplate>
+                    <SfDropDownList DataSource="@WellRecords" TItem="WellReadModel" TValue="string"
+                                    @bind-Value="@((context as LossWriteModel).WellName)">
+                        <DropDownListFieldSettings Text="Name" Value="Name">
+                        </DropDownListFieldSettings>
+                    </SfDropDownList>
+                </EditTemplate>
+            </GridColumn>
+            <GridColumn Field=@nameof(LossWriteModel.EventName) HeaderText="EventName"/>
+            <GridColumn Field=@nameof(LossWriteModel.LoosDate) HeaderText="LoosDate"/>
+        </GridColumns>
+    </SfGrid>
 }
-
-@if(WellRecords.Any()){
-    <EditForm Model="@LossRecord" OnValidSubmit="HandleValidSubmit">
-    <ObjectGraphDataAnnotationsValidator />
-    <h3>Loss Entry</h3>
-    <hr />
-    <ValidationSummary />
-    <div class="form-group row">
-        <label for="wellName" class="col-sm-2 col-form-label">
-            Well Name
-        </label>
-        <div class="col-sm-10">
-            <InputSelect @bind-Value="LossRecord.WellName" class="form-control">
-                @foreach (var well in WellRecords)
-                {
-                    <option value="@well.Name">@well.Name</option>
-                }
-            </InputSelect>
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="eventName" class="col-sm-2 col-form-label">
-            Event Name
-        </label>
-        <div class="col-sm-10">
-            <InputText id="eventName" class="form-control" placeholder="Event Name"
-                       @bind-Value="LossRecord.EventName" />
-            <ValidationMessage For="@(() => LossRecord.EventName)" />
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="lossDate" class="col-sm-2 col-form-label">
-            Date Of Birth
-        </label>
-        <div class="col-sm-10">
-            <InputDate @bind-Value="LossRecord.LoosDate" class="form-control" />
-        </div>
-    </div>
-     
-    <button class="btn btn-primary" type="submit">Submit</button>
-</EditForm>
+else
+{
+    <SfSpinner @bind-Visible="spinnerVisible" Label="Loading Data..." Size="50" Type="SpinnerType.Bootstrap4" />
 }

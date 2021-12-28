@@ -25,7 +25,7 @@ public sealed class CreateLooseRecords
         {
             RuleFor(x => x.WellName).NotEmpty().MaximumLength(50).WithMessage("Well name must not exceed 50 characters.");;
             RuleFor(x => x.EventName).NotNull().MaximumLength(100);
-            RuleFor(x => x.LossDate).NotNull().Must(IsValidDate);
+            RuleFor(x => x.LoosDate).NotNull().Must(IsValidDate);
         }
         private static bool IsValidDate(DateTime date)
         {
@@ -54,7 +54,7 @@ public sealed class CreateLooseRecords
                     throw new WellNotFoundException(record.WellName);
                 }
 
-                var looseRecord = new Domain.Entities.Looses(record.WellName, record.EventName, record.LossDate);
+                var looseRecord = new Domain.Entities.Looses(record.WellName, record.EventName, record.LoosDate);
                 // var daysOffline = 0;
                 // var previousLossDate = record.LossDate.AddDays(-1);
                 // looseRecord.UpdateOfflineDays(daysOffline);

@@ -4,7 +4,11 @@ namespace Looses.Web.Models;
 
 public class LossWriteModel
 {
-    
+    public LossWriteModel()
+    {
+        Key = new Random().Next(1, 100);
+    }
+    public int Key { get; set; }  
     [Required]
     [MaxLength(50)]
     public string WellName { get; set; }
