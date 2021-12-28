@@ -7,18 +7,19 @@
 
 <p>This component demonstrates fetching data from the server.</p>
 
-@if (forecasts == null)
+@if (dataList == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <SfGrid DataSource="@forecasts">
+    <SfGrid DataSource="@dataList">
         <GridColumns>
-            <GridColumn Field=@nameof(WeatherForecast.Date) HeaderText="Date" />
-            <GridColumn Field=@nameof(WeatherForecast.TemperatureC) HeaderText="Temp. (C)" />
-            <GridColumn Field=@nameof(WeatherForecast.TemperatureF) HeaderText="Temp. (F)" />
-            <GridColumn Field=@nameof(WeatherForecast.Summary) HeaderText="Summary" />
+            <GridColumn Field=@nameof(LossReadModel.Id) HeaderText="Id" />
+            <GridColumn Field=@nameof(LossReadModel.WellName) HeaderText="WellName" />
+            <GridColumn Field=@nameof(LossReadModel.EventName) HeaderText="EventName" />
+            <GridColumn Field=@nameof(LossReadModel.LoosDate) HeaderText="LoosDate" />
+            <GridColumn Field=@nameof(LossReadModel.DaysOffline) HeaderText="DaysOffline" />
         </GridColumns>
      </SfGrid> 
     
@@ -48,11 +49,11 @@ else
 }
 
 @code {
-    private WeatherForecast[]? forecasts;
+    private LossReadModel[]? dataList;
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/data.json");
+        dataList = await Http.GetFromJsonAsync<LossReadModel[]>("looses"); //"sample-data/data.json");
     }
 
     public class WeatherForecast

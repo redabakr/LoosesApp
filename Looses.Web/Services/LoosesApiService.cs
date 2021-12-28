@@ -6,7 +6,7 @@ namespace Looses.Web.Services;
 public class LoosesApiService : ILoosesApiService
 {
     private readonly HttpClient _httpClient;
-
+    private readonly string _baseUrl = "https://localhost:3000/";
     public LoosesApiService(HttpClient httpClient)
     {
         _httpClient = httpClient;
@@ -15,12 +15,9 @@ public class LoosesApiService : ILoosesApiService
     {
         try
         {
-            return await _httpClient.GetFromJsonAsync<IEnumerable<WellReadModel>>("/wells");
+            return await _httpClient.GetFromJsonAsync<IEnumerable<WellReadModel>>("wells");
         }
-        catch
-        {
-            
-        }
+        catch{ }
 
         return new List<WellReadModel>();
     }
@@ -29,25 +26,17 @@ public class LoosesApiService : ILoosesApiService
     {
         try
         {
-            var response =
-                await _httpClient.GetAsync(
-                    $"/looses?wellName={wellName}"); //await _httpClient.GetFromJsonAsync<IEnumerable<LossReadModel>>($"/looses?wellName={wellName}");
-            if (response.IsSuccessStatusCode)
-            {
-                return await response.Content.ReadFromJsonAsync<IEnumerable<LossReadModel>>();
-            }
+            return await _httpClient.GetFromJsonAsync<IEnumerable<LossReadModel>>(
+                    $"looses?wellName={wellName}"); //await _httpClient.GetFromJsonAsync<IEnumerable<LossReadModel>>($"/looses?wellName={wellName}");
         }
-        catch
-        {
-            
-        }
+        catch { }
 
         return new List<LossReadModel>();
     }
 
     public async Task<LossReadModel> CreateLossRecord(LossWriteModel lossRecord)
     {
-        using var response = await _httpClient.PostAsJsonAsync("/loss", lossRecord);
+        using var response = await _httpClient.PostAsJsonAsync("loss", lossRecord);
         if (response.IsSuccessStatusCode)
         {
             return await response.Content.ReadFromJsonAsync<LossReadModel>();

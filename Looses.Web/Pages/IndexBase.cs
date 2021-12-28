@@ -1,30 +1,26 @@
 ﻿using Looses.Web.Models;
-using Looses.Web.Services;
+using System.Net.Http.Json;
 using Microsoft.AspNetCore.Components;
 
 namespace Looses.Web.Pages;
 
 public class IndexBase: ComponentBase
 {
-    [Inject] public ILoosesApiService LoosesApiService { get; set; }
-    public IEnumerable<LossReadModel> LossRecords { get; set; }
-    public bool SpinnerVisible { get; set; }
-    public  bool ErrorLoading { get; set; }
+   [Inject]
+   protected HttpClient Http { get; set; }
+   protected LossReadModel[]? LossRecords;
+    protected bool spinnerVisible { get; set; }
+    protected bool getLoosesError { get; set; }
+
+   // protected override bool ShouldRender() => shouldRender;
 
     protected override async Task OnInitializedAsync()
     {
-        try
-        {
-            SpinnerVisible = true;
-            ErrorLoading = false;
-            var wellName = "";
-            LossRecords = await LoosesApiService.GetLooses(wellName);
-            SpinnerVisible = false;
-        }
-        catch
-        {
-            ErrorLoading = true;
-            SpinnerVisible = false;
-        }
+            getLoosesError = false;
+            spinnerVisible = true;
+            LossRecords = await Http.GetFromJsonAsync<LossReadModel[]>("looses");
+            spinnerVisible = false;
+           // shouldRender = true;
+        
     }
 }

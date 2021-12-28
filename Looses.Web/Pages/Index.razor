@@ -3,27 +3,18 @@
 @inherits IndexBase
 
 <h3>Looses</h3>
-<SfSpinner @bind-Visible="SpinnerVisible" Label="Loading Data..." Size="50" Type="SpinnerType.Bootstrap4" />
-@if(ErrorLoading)
-{
-    <p><em> Error loading wells data...</em></p>
-}
+<SfSpinner @bind-Visible="spinnerVisible" Label="Loading Data..." Size="50" Type="SpinnerType.Bootstrap4" />
+ 
 @if (LossRecords != null)
 {
     <SfGrid DataSource="@LossRecords" AllowPaging="true" AllowSorting="true">
-        <GridPageSettings PageSize="5" PageSizes="true" PageCount="3" />
-        <GridSortSettings AllowUnsort="true">
-            <GridSortColumns>
-                <GridSortColumn Field="LossDate" Direction="SortDirection.Descending"></GridSortColumn>
-            </GridSortColumns>
-        </GridSortSettings>
         <GridColumns>
-            <GridColumn Field=@nameof(LossReadModel.Id) HeaderText="Id"/>
-            <GridColumn Field=@nameof(LossReadModel.WellName) HeaderText="Well Name"/>
-            <GridColumn Field=@nameof(LossReadModel.EventName) HeaderText="Event Name"/>
-            <GridColumn Field=@nameof(LossReadModel.LoosDate) HeaderText="Loos Date"/>
-            <GridColumn Field=@nameof(LossReadModel.DaysOffline) HeaderText="Days Offline" AllowSorting="false"/>
+            <GridColumn Field=@nameof(LossReadModel.Id) HeaderText="Id" />
+            <GridColumn Field=@nameof(LossReadModel.WellName) HeaderText="WellName" />
+            <GridColumn Field=@nameof(LossReadModel.EventName) HeaderText="EventName" />
+            <GridColumn Field=@nameof(LossReadModel.LoosDate) HeaderText="LoosDate" />
+            <GridColumn Field=@nameof(LossReadModel.DaysOffline) HeaderText="DaysOffline" />
         </GridColumns>
-    </SfGrid>
+    </SfGrid> 
 }
  

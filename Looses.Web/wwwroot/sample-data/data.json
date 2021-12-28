@@ -1,27 +1,72 @@
 ﻿[
   {
-    "date": "2018-05-06",
-    "temperatureC": 1,
-    "summary": "Freezing"
+    "id": 6,
+    "wellName": "R-001",
+    "eventName": "EPS Failure",
+    "loosDate": "2021-05-01T00:00:00",
+    "daysOffline": 0
   },
   {
-    "date": "2018-05-07",
-    "temperatureC": 14,
-    "summary": "Bracing"
+    "id": 17,
+    "wellName": "R-001",
+    "eventName": "EPS Failure",
+    "loosDate": "2021-05-01T00:00:00",
+    "daysOffline": 0
   },
   {
-    "date": "2018-05-08",
-    "temperatureC": -13,
-    "summary": "Freezing"
+    "id": 18,
+    "wellName": "R-001",
+    "eventName": "EPS Failure",
+    "loosDate": "2021-05-02T00:00:00",
+    "daysOffline": 0
   },
   {
-    "date": "2018-05-09",
-    "temperatureC": -16,
-    "summary": "Balmy"
+    "id": 7,
+    "wellName": "R-001",
+    "eventName": "EPS Failure",
+    "loosDate": "2021-05-02T00:00:00",
+    "daysOffline": 0
   },
   {
-    "date": "2018-05-10",
-    "temperatureC": -2,
-    "summary": "Chilly"
+    "id": 8,
+    "wellName": "R-001",
+    "eventName": "EPS Failure",
+    "loosDate": "2021-05-03T00:00:00",
+    "daysOffline": 0
+  },
+  {
+    "id": 19,
+    "wellName": "R-001",
+    "eventName": "EPS Failure",
+    "loosDate": "2021-05-03T00:00:00",
+    "daysOffline": 0
+  },
+  {
+    "id": 20,
+    "wellName": "R-001",
+    "eventName": "WorkOver",
+    "loosDate": "2021-06-20T00:00:00",
+    "daysOffline": 0
+  },
+  {
+    "id": 9,
+    "wellName": "R-001",
+    "eventName": "WorkOver",
+    "loosDate": "2021-06-20T00:00:00",
+    "daysOffline": 0
+  },
+  {
+    "id": 10,
+    "wellName": "R-001",
+    "eventName": "WorkOver",
+    "loosDate": "2021-06-21T00:00:00",
+    "daysOffline": 0
+  },
+  {
+    "id": 21,
+    "wellName": "R-001",
+    "eventName": "WorkOver",
+    "loosDate": "2021-06-21T00:00:00",
+    "daysOffline": 0
   }
 ]

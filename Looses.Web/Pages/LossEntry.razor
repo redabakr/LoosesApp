@@ -2,8 +2,8 @@
 
 @inherits LossEntryBase
 
-<SfSpinner @bind-Visible="SpinnerVisible" Label="Loading Data..." Size="50" Type="SpinnerType.Bootstrap4" />
-@if(ErrorLoading)
+<SfSpinner @bind-Visible="spinnerVisible" Label="Loading Data..." Size="50" Type="SpinnerType.Bootstrap4" />
+@if(getWellsError)
 {
     <p><em> Error loading wells data...</em></p>
 }
