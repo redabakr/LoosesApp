@@ -10,7 +10,6 @@ public sealed class CalculateDaysOffline
     private sealed class CommandHandler : IRequestHandler<Command>
     {
         private readonly ILooseRepository _looseRepository;
-
         public CommandHandler(ILooseRepository looseRepository)
         {
             _looseRepository = looseRepository;

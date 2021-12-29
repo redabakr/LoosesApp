@@ -53,17 +53,12 @@ public sealed class CreateLooseRecords
                 {
                     throw new WellNotFoundException(record.WellName);
                 }
-
                 var looseRecord = new Domain.Entities.Looses(record.WellName, record.EventName, record.LoosDate);
-                // var daysOffline = 0;
-                // var previousLossDate = record.LossDate.AddDays(-1);
-                // looseRecord.UpdateOfflineDays(daysOffline);
                 await _looseRepository.AddAsync(looseRecord);
             }
             await _looseRepository.SaveChangesAsync();
             return Unit.Value;
         }
     }//CommandHandler
-    
 }
 

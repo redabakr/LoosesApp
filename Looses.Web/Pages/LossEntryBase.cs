@@ -25,10 +25,12 @@ public class LossEntryBase: ComponentBase
 
     protected async Task PushData()
     {
+        spinnerVisible = true;
         var jsonContent = new
         {
             loosesRecords = GridData
         };
         await Http.PutAsJsonAsync("/looses", jsonContent);
+        spinnerVisible = false;
     }
 }

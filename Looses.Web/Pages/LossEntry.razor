@@ -1,10 +1,10 @@
 ﻿@page "/loss-entry"
 
 @inherits LossEntryBase
-
-@if (WellRecords != null)
+<SfSpinner @bind-Visible="spinnerVisible" Label="Pushing Data..." Size="50" Type="SpinnerType.Bootstrap4" />
+@if (WellRecords != null && WellRecords.Any())
 {
-    <button type="button" class="btn btn-primary" style="margin-bottom: 10px;" @onclick="PushData">Push Data</button>
+    <button type="button" class="btn btn-primary" style="margin-bottom: 10px;" disabled="@spinnerVisible" @onclick="PushData">Push Data</button>
     <br/>
     <SfGrid DataSource="@GridData" AllowPaging="true" Toolbar="@(new List<string>() { "Add", "Edit", "Update", "Delete", "Cancel" })">
         <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true"/>
@@ -24,8 +24,4 @@
             <GridColumn Field=@nameof(LossWriteModel.LoosDate) HeaderText="LoosDate"/>
         </GridColumns>
     </SfGrid>
-}
-else
-{
-    <SfSpinner @bind-Visible="spinnerVisible" Label="Loading Data..." Size="50" Type="SpinnerType.Bootstrap4" />
 }

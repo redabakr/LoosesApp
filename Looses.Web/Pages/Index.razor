@@ -5,11 +5,12 @@
 <h3>Looses</h3>
 <SfSpinner @bind-Visible="spinnerVisible" Label="Loading Data..." Size="50" Type="SpinnerType.Bootstrap4" />
  
-@if (LossRecords != null)
+@if (LossRecords != null && LossRecords.Any())
 {
-    <button type="button" class="btn btn-primary" style="margin-bottom: 10px;" @onclick="CalculateOffDays">Calculate Off Days</button>
+    <button type="button" class="btn btn-primary" style="margin-bottom: 10px;" disabled="@spinnerVisible" @onclick="CalculateOffDays">Calculate Off Days</button>
     
-    <SfGrid DataSource="@LossRecords" AllowPaging="true" AllowSorting="true">
+    <SfGrid DataSource="@LossRecords" AllowPaging="true" AllowSorting="true" Toolbar="@(new List<string>() { "Search" })">
+        <GridSearchSettings Fields="@(new[] { "WellName" })" Operator=Operator.Contains IgnoreCase="true" ></GridSearchSettings>
         <GridColumns>
             <GridColumn Field=@nameof(LossReadModel.Id) HeaderText="Id" />
             <GridColumn Field=@nameof(LossReadModel.WellName) HeaderText="WellName" />

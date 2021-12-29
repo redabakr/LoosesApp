@@ -15,7 +15,7 @@ public class LossWriteModel
     [Required]
     [MaxLength(100)]
     public string EventName { get; set; }
-
+    [DisplayFormat(DataFormatString = "d")]
     [Required] public DateTime LoosDate { get; set; } = DateTime.Now;
 
 }
